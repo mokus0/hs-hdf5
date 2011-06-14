@@ -1,0 +1,44 @@
+name:                   hdf5
+version:                0.0.0.1
+stability:              provisional
+
+cabal-version:          >= 1.2
+build-type:             Simple
+
+author:                 James Cook <mokus@deepbondi.net>
+maintainer:             James Cook <mokus@deepbondi.net>
+license:                PublicDomain
+homepage:               https://github.com/mokus0/hs-hdf5
+
+category:               Database
+synopsis:               Haskell interface to the HDF5 scientific data storage library.
+description:            This is a low-level but typesafe Haskell interface to the HDF5 library.  No pointers necessary.
+
+Library
+  hs-source-dirs:       src
+  ghc-options:          -fwarn-unused-imports -fwarn-unused-binds
+  exposed-modules:      Bindings.HDF5.Core
+                        Bindings.HDF5.Datatype
+                        Bindings.HDF5.Error
+                        Bindings.HDF5.ErrorCodes
+                        Bindings.HDF5.PropertyList
+                        Bindings.HDF5.PropertyList.DAPL
+                        Bindings.HDF5.PropertyList.DCPL
+                        Bindings.HDF5.PropertyList.DXPL
+                        Bindings.HDF5.PropertyList.FAPL
+                        Bindings.HDF5.PropertyList.FCPL
+                        Bindings.HDF5.PropertyList.OCPL
+                        Bindings.HDF5.PropertyList.GAPL
+                        Bindings.HDF5.PropertyList.GCPL
+                        Bindings.HDF5.PropertyList.LAPL
+                        Bindings.HDF5.PropertyList.LCPL
+                        Bindings.HDF5.PropertyList.STRCPL
+                        
+  other-modules:        Bindings.HDF5.Core.HId
+                        Bindings.HDF5.Core.HDFResultType
+                        
+  build-depends:        base >= 3,
+                        bindings-hdf5,
+                        bytestring,
+                        tagged,
+                        vector
