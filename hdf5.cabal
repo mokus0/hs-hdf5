@@ -33,6 +33,8 @@ Library
                         Bindings.HDF5.PropertyList.LAPL
                         Bindings.HDF5.PropertyList.LCPL
                         Bindings.HDF5.PropertyList.STRCPL
+                        Bindings.HDF5.PropertyList.TAPL
+                        Bindings.HDF5.PropertyList.TCPL
                         
   other-modules:        Bindings.HDF5.Core.HId
                         Bindings.HDF5.Core.HDFResultType

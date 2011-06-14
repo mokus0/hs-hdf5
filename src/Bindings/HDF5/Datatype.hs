@@ -3,12 +3,17 @@ module Bindings.HDF5.Datatype where
 
 import Bindings.HDF5.Raw.H5
 import Bindings.HDF5.Raw.H5I
+import Bindings.HDF5.Raw.H5P
 import Bindings.HDF5.Raw.H5T
 import Bindings.HDF5.Core
 import Bindings.HDF5.Error
+import Bindings.HDF5.PropertyList.LCPL
+import Bindings.HDF5.PropertyList.TAPL
+import Bindings.HDF5.PropertyList.TCPL
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Unsafe as BS
 import Data.Int
+import Data.List
 import Data.Tagged
 import Data.Word
 import Foreign
@@ -319,16 +324,29 @@ lockTypeID (TypeID t) =
     withErrorCheck_ $
         h5t_lock t
 
--- TODO: implement these
+commitTypeID :: Location t => t -> BS.ByteString -> TypeID -> Maybe LCPL -> Maybe TCPL -> Maybe TAPL -> IO ()
+commitTypeID loc name typeId lcpl tcpl tapl =
+    withErrorCheck_ $
+        BS.useAsCString name $ \name ->
+            h5t_commit2 (hid loc) name (hid typeId) (maybe h5p_DEFAULT hid lcpl) (maybe h5p_DEFAULT hid tcpl) (maybe h5p_DEFAULT hid tapl)
 
--- commitTypeID :: Location t => t -> ByteString -> TypeID -> Maybe LCPL -> Maybe TCPL -> Maybe TAPL -> IO ()
--- commitTypeID ...
+openTypeID :: Location t => t -> BS.ByteString -> Maybe TAPL -> IO TypeID
+openTypeID loc name tapl =
+    fmap TypeID $
+        BS.useAsCString name $ \name ->
+            withErrorCheck $
+                h5t_open2 (hid loc) name (maybe h5p_DEFAULT hid tapl)
 
--- openTypeID :: Location t => t -> ByteString -> Maybe TAPL -> IO TypeID
+commitTypeIDAnonymously :: Location t => t -> TypeID -> Maybe TCPL -> Maybe TAPL -> IO ()
+commitTypeIDAnonymously loc typeId tcpl tapl =
+    withErrorCheck_ $
+        h5t_commit_anon (hid loc) (hid typeId) (maybe h5p_DEFAULT hid tcpl) (maybe h5p_DEFAULT hid tapl)
 
--- commitTypeIDAnonymously :: 
-
--- getTypeCreationPList :: TypeID -> IO TCPL
+getTypeCreationPList :: TypeID -> IO TCPL
+getTypeCreationPList (TypeID t) =
+    fmap uncheckedFromHId $
+        withErrorCheck $
+            h5t_get_create_plist t
 
 committedTypeID :: TypeID -> IO Bool
 committedTypeID (TypeID t) =
@@ -354,33 +372,79 @@ decodeTypeID bs =
         BS.unsafeUseAsCString bs $ \buf ->
             h5t_decode (InArray buf)
 
--- TODO: implement these
-
 -- * Operations defined on compound datatypes
 
--- insertCompoundTypeMember
--- packCompoundType
+insertCompoundTypeMember :: TypeID -> BS.ByteString -> CSize -> TypeID -> IO ()
+insertCompoundTypeMember (TypeID parent) name offset (TypeID member) =
+    withErrorCheck_ $
+        BS.useAsCString name $ \name ->
+            h5t_insert parent name offset member
+
+packCompoundType :: TypeID -> IO ()
+packCompoundType (TypeID t) = 
+    withErrorCheck_ $
+        h5t_pack t
 
 -- * Operations defined on enumeration datatypes
 
--- createEnumType
--- insertEnumTypeMember
--- nameOfEnumItem
--- valueOfEnumItem
+-- TODO: figure out good types for these
+-- createEnumType :: TypeID -> IO TypeID
+-- createEnumType (TypeID base) =
+--     fmap TypeID $
+--         withErrorCheck $
+--             h5t_enum_create base
+
+-- h5t_enum_insert
+-- h5t_enum_nameof
+-- h5t_enum_valueof
 
 -- * Operations defined on variable-length datatypes
 
--- createVLenType
+createVLenType :: TypeID -> IO TypeID
+createVLenType (TypeID base) =
+    fmap TypeID $
+        withErrorCheck $
+            h5t_vlen_create base
 
 -- * Operations defined on array datatypes
 
--- createArrayType
--- getArrayTypeNDims
+createArrayType :: TypeID -> [HSize] -> IO TypeID
+createArrayType (TypeID base) dims =
+    fmap TypeID $
+        withInList (map hSize dims) $ \dims ->
+            withErrorCheck $
+                h5t_array_create2 base nDims dims
+    where nDims = genericLength dims
+
+getArrayTypeNDims :: TypeID -> IO CInt 
+getArrayTypeNDims (TypeID t) =
+    withErrorWhen (< 0) $
+        h5t_get_array_ndims t
+
+getArrayTypeDims :: TypeID -> IO [HSize]
+getArrayTypeDims (TypeID t) = do
+    nDims <- getArrayTypeNDims (TypeID t)
+    
+    fmap (map HSize . fst) $
+        withOutList' (fromIntegral nDims) $ \dims ->
+            fmap fromIntegral $
+                 withErrorWhen (< 0) $
+                    h5t_get_array_dims2 t dims
+    
 
 -- * Operations defined on opaque datatypes
 
--- setOpaqueTypeTag
--- getOpaqueTypeTag
+setOpaqueTypeTag :: TypeID -> BS.ByteString -> IO ()
+setOpaqueTypeTag (TypeID t) tag =
+    withErrorCheck_ $
+        BS.useAsCString tag $ \tag ->
+            h5t_set_tag t tag
+
+getOpaqueTypeTag :: TypeID -> IO BS.ByteString
+getOpaqueTypeTag (TypeID t) = do
+    cstr <- withErrorWhen (nullPtr ==) $
+        h5t_get_tag t
+    BS.unsafePackMallocCString cstr
 
 -- * Querying property values
 
@@ -486,8 +550,26 @@ getFloatTypeEBias (TypeID t) = do
     withErrorWhen (== 0) $
         h5t_get_ebias t
 
+data Normalization
+    = Implied
+    | MSBSet
+    deriving (Eq, Ord, Enum, Bounded, Read, Show)
+
+instance HDFResultType H5T_norm_t where
+    isError (H5T_norm_t c) = c < 0
+
+normalization c
+    | c == h5t_NORM_IMPLIED = Just Implied
+    | c == h5t_NORM_MSBSET  = Just MSBSet
+    | c == h5t_NORM_NONE    = Nothing
+    | otherwise = error "Unknown H5T_norm_t value"
+
 -- TODO: implement this
--- getFloatTypeNormalization :: 
+getFloatTypeNormalization :: TypeID -> IO (Maybe Normalization)
+getFloatTypeNormalization (TypeID t) =
+    fmap normalization $
+        withErrorCheck $
+            h5t_get_norm t
 
 getFloatTypeInternalPad :: TypeID -> IO Pad
 getFloatTypeInternalPad (TypeID t) = do

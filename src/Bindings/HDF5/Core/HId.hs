@@ -24,3 +24,6 @@ instance HId HId_t where
 
 instance FromHId HId_t where
     uncheckedFromHId = id
+
+-- |HId types which can also serve as containers for other objects
+class HId t => Location t where
