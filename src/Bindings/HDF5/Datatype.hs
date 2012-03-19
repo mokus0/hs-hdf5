@@ -564,7 +564,6 @@ normalization c
     | c == h5t_NORM_NONE    = Nothing
     | otherwise = error "Unknown H5T_norm_t value"
 
--- TODO: implement this
 getFloatTypeNormalization :: TypeID -> IO (Maybe Normalization)
 getFloatTypeNormalization (TypeID t) =
     fmap normalization $
