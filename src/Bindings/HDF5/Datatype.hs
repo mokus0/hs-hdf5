@@ -126,14 +126,14 @@ instance NativeType CFloat where
 instance NativeType CDouble where
     nativeTypeId = Tagged nativeDouble
 
---instance NativeType HAddr where
---    nativeTypeId = Tagged nativeHaddr
+instance NativeType HAddr where
+    nativeTypeId = Tagged nativeHaddr
 
 instance NativeType HSize where
     nativeTypeId = Tagged nativeHsize
 
---instance NativeType HSSize where
---    nativeTypeId = Tagged nativeHssize
+instance NativeType HSSize where
+    nativeTypeId = Tagged nativeHssize
 
 instance NativeType HErr_t where
     nativeTypeId = Tagged nativeHerr

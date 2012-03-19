@@ -41,6 +41,20 @@ instance Read HSSize where
 instance Show HSSize where
     showsPrec p (HSSize (HSSize_t n)) = showsPrec p n
 
+newtype HAddr = HAddr (HAddr_t)
+    deriving (Eq, Ord, Enum, Bounded, Num, Real, Integral, Bits, Storable)
+
+hAddr (HAddr a) = a
+
+instance Read HAddr where
+    readsPrec p s = 
+        [ (HAddr (HAddr_t n), rest)
+        | (n, rest) <- readsPrec p s
+        ]
+
+instance Show HAddr where
+    showsPrec p (HAddr (HAddr_t n)) = showsPrec p n
+
 data IH_Info = IH_Info
     { indexSize     :: !HSize
     , heapSize      :: !HSize
