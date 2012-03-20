@@ -12,7 +12,15 @@ This interface does not aim to cover all of HDF5, at least not right now.  If th
 Usage
 ------
 
-TODO: write this section :)
+Step 1:
+
+    import Bindings.HDF5
+
+Step 2:
+
+Go nuts!  (You probably will want to keep [the HDF5 reference](http://www.hdfgroup.org/HDF5/doc/RM/RM_H5Front.html) handy)
+
+TODO: expand this section :)
 
 For now, take a look at [some examples](https://github.com/mokus0/hs-hdf5/tree/master/examples).
 
