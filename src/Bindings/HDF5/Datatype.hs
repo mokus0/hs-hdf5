@@ -62,6 +62,49 @@ classFromCode c
     | c == h5t_ARRAY        = Array    
     | otherwise = error ("Unknown H5T_class_t " ++ show c)
 
+data CSet
+    = ASCII
+    | Reserved2
+    | Reserved3
+    | Reserved4
+    | Reserved5
+    | Reserved6
+    | Reserved7
+    | Reserved8
+    | Reserved9
+    | Reserved10
+    | Reserved11
+    | Reserved12
+    | Reserved13
+    | Reserved14
+    | Reserved15
+    | UTF8
+    deriving (Eq, Ord, Read, Show, Enum, Bounded)
+
+cSetCode :: CSet -> H5T_cset_t
+cSetCode ASCII          = h5t_CSET_ASCII
+cSetCode Reserved2      = h5t_CSET_RESERVED_2
+cSetCode Reserved3      = h5t_CSET_RESERVED_3
+cSetCode Reserved4      = h5t_CSET_RESERVED_4
+cSetCode Reserved5      = h5t_CSET_RESERVED_5
+cSetCode Reserved6      = h5t_CSET_RESERVED_6
+cSetCode Reserved7      = h5t_CSET_RESERVED_7
+cSetCode Reserved8      = h5t_CSET_RESERVED_8
+cSetCode Reserved9      = h5t_CSET_RESERVED_9
+cSetCode Reserved10     = h5t_CSET_RESERVED_10
+cSetCode Reserved11     = h5t_CSET_RESERVED_11
+cSetCode Reserved12     = h5t_CSET_RESERVED_12
+cSetCode Reserved13     = h5t_CSET_RESERVED_13
+cSetCode Reserved14     = h5t_CSET_RESERVED_14
+cSetCode Reserved15     = h5t_CSET_RESERVED_15
+cSetCode UTF8           = h5t_CSET_UTF8
+
+cSetFromCode :: H5T_cset_t -> CSet
+cSetFromCode c = case lookup c cSets of
+    Just cset -> cset
+    Nothing   -> error ("Unknown charset code: " ++ show c)
+    where cSets = [ (cSetCode x, x) | x <- [minBound .. maxBound]]
+
 newtype TypeID = TypeID HId_t
     deriving (Eq, HId, FromHId, HDFResultType)
 
