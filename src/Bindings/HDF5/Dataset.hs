@@ -28,6 +28,7 @@ import Bindings.HDF5.Core
 import Bindings.HDF5.Dataspace
 import Bindings.HDF5.Datatype
 import Bindings.HDF5.Error
+import Bindings.HDF5.Object
 import Bindings.HDF5.PropertyList.DAPL
 import Bindings.HDF5.PropertyList.DCPL
 import Bindings.HDF5.PropertyList.DXPL
@@ -43,6 +44,9 @@ import Foreign.Ptr.Conventions
 
 newtype Dataset = Dataset HId_t
     deriving (Eq, HId, FromHId, HDFResultType)
+
+instance Object Dataset where
+    staticObjectType = Tagged (Just DatasetObj)
 
 createDataset :: Location loc
     => loc -> BS.ByteString -> TypeID -> Dataspace -> Maybe LCPL -> Maybe DCPL -> Maybe DAPL -> IO Dataset

@@ -23,17 +23,23 @@ Library
                         Bindings.HDF5.Datatype
                         Bindings.HDF5.Error
                         Bindings.HDF5.ErrorCodes
+                        Bindings.HDF5.File
+                        Bindings.HDF5.Group
+                        Bindings.HDF5.Link
+                        Bindings.HDF5.Object
                         Bindings.HDF5.PropertyList
                         Bindings.HDF5.PropertyList.DAPL
                         Bindings.HDF5.PropertyList.DCPL
                         Bindings.HDF5.PropertyList.DXPL
                         Bindings.HDF5.PropertyList.FAPL
+                        Bindings.HDF5.PropertyList.FMPL
                         Bindings.HDF5.PropertyList.FCPL
                         Bindings.HDF5.PropertyList.OCPL
                         Bindings.HDF5.PropertyList.GAPL
                         Bindings.HDF5.PropertyList.GCPL
                         Bindings.HDF5.PropertyList.LAPL
                         Bindings.HDF5.PropertyList.LCPL
+                        Bindings.HDF5.PropertyList.OCPYPL
                         Bindings.HDF5.PropertyList.STRCPL
                         Bindings.HDF5.PropertyList.TAPL
                         Bindings.HDF5.PropertyList.TCPL

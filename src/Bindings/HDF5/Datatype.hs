@@ -7,6 +7,7 @@ import Bindings.HDF5.Raw.H5P
 import Bindings.HDF5.Raw.H5T
 import Bindings.HDF5.Core
 import Bindings.HDF5.Error
+import Bindings.HDF5.Object
 import Bindings.HDF5.PropertyList.LCPL
 import Bindings.HDF5.PropertyList.TAPL
 import Bindings.HDF5.PropertyList.TCPL
@@ -107,6 +108,9 @@ cSetFromCode c = case lookup c cSets of
 
 newtype TypeID = TypeID HId_t
     deriving (Eq, HId, FromHId, HDFResultType)
+
+instance Object TypeID where
+    staticObjectType = Tagged (Just DatatypeObj)
 
 class Storable t => NativeType t where
     nativeTypeId :: Tagged t TypeID

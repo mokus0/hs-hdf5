@@ -55,6 +55,7 @@ module Bindings.HDF5.Dataspace
 
 import Bindings.HDF5.Core
 import Bindings.HDF5.Error
+import Bindings.HDF5.Object
 import Bindings.HDF5.Raw.H5I
 import Bindings.HDF5.Raw.H5S
 import Control.Exception (assert)
@@ -63,6 +64,7 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Unsafe as BS
 import Data.List
 import Data.Maybe
+import Data.Tagged
 import qualified Data.Vector as V
 import qualified Data.Vector.Storable as SV
 import Foreign
@@ -71,6 +73,9 @@ import Foreign.Ptr.Conventions
 
 newtype Dataspace = Dataspace HId_t
     deriving (Eq, HId, FromHId, HDFResultType)
+
+instance Object Dataspace where
+    staticObjectType = Tagged (Just DataspaceObj)
 
 data DataspaceClass
     = Scalar

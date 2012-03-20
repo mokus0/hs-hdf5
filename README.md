@@ -14,7 +14,7 @@ Usage
 
 TODO: write this section :)
 
-For now, take a look at [some examples](https://github.com/mokus0/hdf5-sandbox/tree/master/examples) which actually use some not-yet-complete interfaces from the [hdf5-sandbox](https://github.com/mokus0/hdf5-sandbox) project too.
+For now, take a look at [some examples](https://github.com/mokus0/hs-hdf5/tree/master/examples).
 
 Installation
 -------------
