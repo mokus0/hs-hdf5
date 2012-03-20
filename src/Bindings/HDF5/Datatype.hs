@@ -354,17 +354,11 @@ committedTypeID (TypeID t) =
         h5t_committed t
 
 encodeTypeID :: TypeID -> IO BS.ByteString
-encodeTypeID (TypeID t) = do
-    sz <- withInOut_ 0 $ \sz -> 
-        withErrorCheck_ $
-            h5t_encode t (OutArray nullPtr) sz
-    
-    buf <- mallocBytes (fromIntegral sz)
-    sz <- withInOut_ sz $ \sz ->
-        withErrorCheck_ $
-            h5t_encode t (OutArray buf) sz
-    
-    BS.unsafePackCStringLen (buf, fromIntegral sz)
+encodeTypeID (TypeID t) = 
+    withOutByteString $ \buf bufSz ->
+        withInOut_ bufSz $ \bufSz ->
+            withErrorCheck_ $
+                h5t_encode t buf bufSz
 
 decodeTypeID :: BS.ByteString -> IO TypeID
 decodeTypeID bs = 

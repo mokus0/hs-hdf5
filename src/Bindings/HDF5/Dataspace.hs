@@ -127,17 +127,11 @@ closeDataspace (Dataspace space_id) =
         h5s_close space_id
 
 encodeDataspace :: Dataspace -> IO BS.ByteString
-encodeDataspace (Dataspace space_id) = do
-    sz <- withInOut_ 0 $ \sz -> 
-        withErrorWhen_ (< 0) $
-            h5s_encode space_id (OutArray nullPtr) sz
-    
-    buf <- mallocBytes (fromIntegral sz)
-    sz <- withInOut_ sz $ \sz ->
-        withErrorWhen_ (< 0) $
-            h5s_encode space_id (OutArray buf) sz
-    
-    BS.unsafePackCStringLen (buf, fromIntegral sz)
+encodeDataspace (Dataspace space_id) = 
+    withOutByteString $ \buf bufSz ->
+        withInOut_ bufSz $ \bufSz ->
+            withErrorCheck_ $
+                h5s_encode space_id buf bufSz
 
 decodeDataspace :: BS.ByteString -> IO Dataspace
 decodeDataspace bs = BS.unsafeUseAsCString bs $ \buf -> 

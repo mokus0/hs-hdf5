@@ -27,7 +27,6 @@ import Bindings.HDF5.PropertyList.FAPL
 import qualified Data.ByteString as BS
 import Foreign.Ptr.Conventions
 import Foreign.C.Types
-import Foreign.Marshal
 
 class PropertyList t => LinkAccessPropertyList t where
 newtype LAPL = LAPL PropertyListID
@@ -55,16 +54,9 @@ setELinkPrefix lapl prefix =
 
 getELinkPrefix :: LinkAccessPropertyList lapl => lapl -> IO BS.ByteString
 getELinkPrefix lapl = do
-    bufSz <- withErrorWhen (<0) $
-        h5p_get_elink_prefix (hid lapl) nullWrappedPtr 0
-    
-    buf <- mallocBytes (fromIntegral bufSz)
-    sz <- withErrorWhen (<0) $
-        h5p_get_elink_prefix (hid lapl) (OutArray buf) (fromIntegral bufSz)
-    
-    bs <- BS.packCStringLen (buf, fromIntegral sz)
-    free buf
-    return bs
+    withOutByteString $ \buf bufSz ->
+        withErrorWhen (< 0) $
+            h5p_get_elink_prefix (hid lapl) buf bufSz
 
 getELinkFAPL :: LinkAccessPropertyList lapl => lapl -> IO FAPL
 getELinkFAPL lapl = 
