@@ -22,5 +22,5 @@ dist
 *.hi
 *.chi
 *.chs.h
-
+*_stub.h
 
