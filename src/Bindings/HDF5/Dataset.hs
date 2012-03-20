@@ -26,7 +26,7 @@ module Bindings.HDF5.Dataset
 
 import Bindings.HDF5.Core
 import Bindings.HDF5.Dataspace
-import Bindings.HDF5.Datatype
+import Bindings.HDF5.Datatype.Internal
 import Bindings.HDF5.Error
 import Bindings.HDF5.Object
 import Bindings.HDF5.PropertyList.DAPL
@@ -49,7 +49,7 @@ instance Object Dataset where
     staticObjectType = Tagged (Just DatasetObj)
 
 createDataset :: Location loc
-    => loc -> BS.ByteString -> TypeID -> Dataspace -> Maybe LCPL -> Maybe DCPL -> Maybe DAPL -> IO Dataset
+    => loc -> BS.ByteString -> Datatype -> Dataspace -> Maybe LCPL -> Maybe DCPL -> Maybe DAPL -> IO Dataset
 createDataset loc_id name type_id space_id lcpl_id dcpl_id dapl_id =
     fmap Dataset $
         withErrorCheck $
@@ -57,7 +57,7 @@ createDataset loc_id name type_id space_id lcpl_id dcpl_id dapl_id =
                 h5d_create2 (hid loc_id) name (hid type_id) (hid space_id) (maybe h5p_DEFAULT hid lcpl_id) (maybe h5p_DEFAULT hid dcpl_id) (maybe h5p_DEFAULT hid dapl_id)
 
 createAnonymousDataset :: Location loc
-    => loc -> TypeID -> Dataspace -> Maybe DCPL -> Maybe DAPL -> IO Dataset
+    => loc -> Datatype -> Dataspace -> Maybe DCPL -> Maybe DAPL -> IO Dataset
 createAnonymousDataset loc_id type_id space_id dcpl_id dapl_id =
     fmap Dataset $
         withErrorCheck $
@@ -99,9 +99,9 @@ getDatasetSpaceStatus (Dataset dset_id) =
         withOut_ $ \status -> 
             withErrorCheck (h5d_get_space_status dset_id status)
 
-getDatasetType :: Dataset -> IO TypeID
+getDatasetType :: Dataset -> IO Datatype
 getDatasetType (Dataset dset_id) =
-    fmap TypeID $
+    fmap Datatype $
         withErrorCheck $
             h5d_get_type dset_id
 

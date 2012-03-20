@@ -17,10 +17,12 @@ description:            This is a low-level but typesafe Haskell interface to th
 Library
   hs-source-dirs:       src
   ghc-options:          -fwarn-unused-imports -fwarn-unused-binds
-  exposed-modules:      Bindings.HDF5.Core
+  exposed-modules:      Bindings.HDF5
+                        Bindings.HDF5.Core
                         Bindings.HDF5.Dataset
                         Bindings.HDF5.Dataspace
                         Bindings.HDF5.Datatype
+                        Bindings.HDF5.Datatype.Internal
                         Bindings.HDF5.Error
                         Bindings.HDF5.ErrorCodes
                         Bindings.HDF5.File

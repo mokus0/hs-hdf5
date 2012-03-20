@@ -24,7 +24,7 @@ module Bindings.HDF5.Link
     ) where
 
 import Bindings.HDF5.Core
-import Bindings.HDF5.Datatype
+import Bindings.HDF5.Datatype.Internal
 import Bindings.HDF5.Error
 import Bindings.HDF5.Group
 import Bindings.HDF5.PropertyList.LAPL

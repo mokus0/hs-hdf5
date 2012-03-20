@@ -44,7 +44,7 @@ import Bindings.HDF5.Core
 import Bindings.HDF5.Error
 import Bindings.HDF5.PropertyList
 import Bindings.HDF5.PropertyList.OCPL
-import Bindings.HDF5.Datatype
+import Bindings.HDF5.Datatype.Internal
 import Bindings.HDF5.Raw.H5D
 import Bindings.HDF5.Raw.H5P
 import Bindings.HDF5.Raw.H5Z
