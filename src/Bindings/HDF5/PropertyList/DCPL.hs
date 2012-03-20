@@ -133,6 +133,7 @@ getExternalN plist idx name_size = do
             withOut_ $ \size ->
                 withErrorCheck_ $
                     h5p_get_external (hid plist) idx name_size (OutArray name) offset size
+    -- TODO: this will leak memory if an exception is thrown
     
     name <- BS.unsafePackCStringLen (name, sz)
     return (BS.takeWhile (0 /=) name, offset, HSize size)
