@@ -22,6 +22,8 @@ module Bindings.HDF5.Dataset
     , writeDataset
     
     , setDatasetExtent
+    
+    , fillSelection
     ) where
 
 import Bindings.HDF5.Core
@@ -40,6 +42,7 @@ import Bindings.HDF5.Raw.H5S
 import Control.Monad.ST (RealWorld)
 import qualified Data.ByteString as BS
 import qualified Data.Vector.Storable as SV
+import qualified Data.Vector.Storable.Mutable as SV.M
 import Foreign.Ptr.Conventions
 
 newtype Dataset = Dataset HId_t
@@ -212,3 +215,11 @@ setDatasetExtent (Dataset dset_id) sizes =
     withErrorCheck_ $
         withInList [sz | HSize sz <- sizes] $ \sizes ->
             h5d_set_extent dset_id sizes
+
+-- Fill part of a vector with a value, using the geometry and selection of the given data space
+fillSelection :: (NativeType a, NativeType b) => a -> SV.MVector RealWorld b -> Dataspace -> IO ()
+fillSelection fill buf space =
+    withErrorCheck_ $
+        withIn fill $ \fill ->
+            SV.M.unsafeWith buf $ \buf ->
+                h5d_fill fill (hdfTypeOf1 fill) (InOutArray buf) (hdfTypeOf1 buf) (hid space)
