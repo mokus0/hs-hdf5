@@ -152,7 +152,7 @@ getSymLinkVal loc name mb_lapl =
         buf <- mallocBytes (fromIntegral n)
         
         withErrorCheck_ $
-            h5l_get_val (hid loc) name buf n lapl
+            h5l_get_val (hid loc) name (OutArray buf) n lapl
         -- TODO: this will leak memory if an exception is thrown
         
         BS.packCStringLen (buf, fromIntegral n)

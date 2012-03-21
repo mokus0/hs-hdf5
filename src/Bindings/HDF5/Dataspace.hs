@@ -142,7 +142,7 @@ decodeDataspace :: BS.ByteString -> IO Dataspace
 decodeDataspace bs = BS.unsafeUseAsCString bs $ \buf -> 
     fmap Dataspace $
         withErrorCheck $
-            h5s_decode buf
+            h5s_decode (InArray buf)
 
 getSimpleDataspaceExtentNPoints :: Dataspace -> IO HSize
 getSimpleDataspaceExtentNPoints (Dataspace space_id) =
