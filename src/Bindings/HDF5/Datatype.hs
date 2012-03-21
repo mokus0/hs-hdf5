@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Bindings.HDF5.Datatype
     ( Datatype
     , Class(..)
@@ -241,6 +242,34 @@ nativeIntLeast64     = Datatype h5t_NATIVE_INT_LEAST64
 nativeUintLeast64    = Datatype h5t_NATIVE_UINT_LEAST64
 nativeIntFast64      = Datatype h5t_NATIVE_INT_FAST64
 nativeUintFast64     = Datatype h5t_NATIVE_UINT_FAST64
+
+if  isIEEE (0 :: Float)
+    && floatRadix  (0 :: Float) == 2
+    && floatDigits (0 :: Float) == 24
+    && floatRange  (0 :: Float) == (-125,128)
+    then [d| instance NativeType Float where nativeTypeId = Tagged nativeFloat |]
+    else [d| |]
+
+if  isIEEE (0 :: Double)
+    && floatRadix  (0 :: Double) == 2
+    && floatDigits (0 :: Double) == 53
+    && floatRange  (0 :: Double) == (-1021,1024)
+    then [d| instance NativeType Double where nativeTypeId = Tagged nativeDouble |]
+    else [d| |]
+
+case sizeOf (0 :: Int) of
+    1   -> [d| instance NativeType Int where nativeTypeId = Tagged nativeInt8  |]
+    2   -> [d| instance NativeType Int where nativeTypeId = Tagged nativeInt16 |]
+    4   -> [d| instance NativeType Int where nativeTypeId = Tagged nativeInt32 |]
+    8   -> [d| instance NativeType Int where nativeTypeId = Tagged nativeInt64 |]
+    _   -> [d| |]
+
+case sizeOf (0 :: Word) of
+    1   -> [d| instance NativeType Word where nativeTypeId = Tagged nativeUint8  |]
+    2   -> [d| instance NativeType Word where nativeTypeId = Tagged nativeUint16 |]
+    4   -> [d| instance NativeType Word where nativeTypeId = Tagged nativeUint32 |]
+    8   -> [d| instance NativeType Word where nativeTypeId = Tagged nativeUint64 |]
+    _   -> [d| |]
 
 -- * Operations defined on all datatypes
 
