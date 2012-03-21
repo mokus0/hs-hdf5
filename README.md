@@ -9,6 +9,15 @@ Generally speaking, "type"-related exceptions should not occur either as long as
 
 This interface does not aim to cover all of HDF5, at least not right now.  If there's any missing functionality you need, let the maintainer know and we'll be happy to accept patches or (if we have the time) implement it.
 
+Installation
+-------------
+
+First, you'll need to install the [low level bindings](https://github.com/mokus0/bindings-hdf5) - see that project's [README](https://github.com/mokus0/bindings-hdf5/blob/master/README.md) for instructions.  Once you've done that, this package can be installed using cabal:
+
+    git clone https://github.com/mokus0/hs-hdf5.git
+    cd hs-hdf5
+    cabal install
+
 Usage
 ------
 
@@ -20,15 +29,12 @@ Step 2:
 
 Go nuts!  (You probably will want to keep [the HDF5 reference](http://www.hdfgroup.org/HDF5/doc/RM/RM_H5Front.html) handy)
 
-TODO: expand this section :)
+    file <- createFile "foo.h5" [Truncate] Nothing Nothing
+    dataspace <- createSimpleDataspace [100,100,100]
+    dataset <- createDataset file "density" nativeFloat dataspace
+                    Nothing Nothing Nothing
+    writeDataset dataset Nothing Nothing Nothing densityVec
+        -- where densityVec is a Data.Vector.Storable.Vector Float
+        -- containing the dataset in row-major order
 
-For now, take a look at [some examples](https://github.com/mokus0/hs-hdf5/tree/master/examples).
-
-Installation
--------------
-
-First, you'll need to install the [low level bindings](https://github.com/mokus0/bindings-hdf5) - see that project's [README](https://github.com/mokus0/bindings-hdf5/blob/master/README.md) for instructions.  Once you've done that, this package can be installed using cabal:
-
-    git clone https://github.com/mokus0/hs-hdf5.git
-    cd hs-hdf5
-    cabal install
+For more detailed examples, take a look at [the examples directory](https://github.com/mokus0/hs-hdf5/tree/master/examples).
