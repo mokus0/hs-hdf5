@@ -1,11 +1,7 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 module Main where
 
-import Bindings.HDF5.Dataset
-import Bindings.HDF5.Dataspace
-import Bindings.HDF5.Datatype
-import Bindings.HDF5.File
-import Bindings.HDF5.PropertyList.DCPL
+import Bindings.HDF5
 
 import Control.Exception (bracket)
 import qualified Data.ByteString.Char8 as BS

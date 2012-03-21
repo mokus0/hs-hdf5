@@ -21,14 +21,7 @@
  - in the root group and in the created group.
  -}
 
-import Bindings.HDF5.Core
-import Bindings.HDF5.Dataset
-import Bindings.HDF5.Dataspace
-import Bindings.HDF5.Datatype
-import Bindings.HDF5.File
-import Bindings.HDF5.Group
-import Bindings.HDF5.Link
-import Bindings.HDF5.PropertyList.DCPL
+import Bindings.HDF5
 
 import qualified Data.ByteString.Char8 as BS
 
@@ -140,7 +133,7 @@ group_info grp name linkInfo = do
     
     -- Check if dataset is chunked.
     layout <- getLayout pid
-    if layout == Chunked
+    if layout == ChunkedLayout
         then do
             -- get chunking information: rank and dimensions.
             chunk_dims_out <- getChunk pid

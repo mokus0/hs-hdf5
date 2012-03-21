@@ -20,10 +20,7 @@ module Main where
  -  Data conversion is performed during write operation.
  -}
 
-import Bindings.HDF5.Dataset
-import Bindings.HDF5.Dataspace
-import Bindings.HDF5.Datatype
-import Bindings.HDF5.File
+import Bindings.HDF5
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Vector.Storable as SV
 import Foreign.C.Types
