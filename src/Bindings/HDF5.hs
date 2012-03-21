@@ -18,21 +18,21 @@ module Bindings.HDF5
     , module Bindings.HDF5.Object
     , module Bindings.HDF5.PropertyList
     
-    , DAPL
-    , DCPL
-    , DXPL
-    , FAPL
-    , FCPL
-    , FMPL
-    , GAPL
-    , GCPL
-    , LAPL
-    , LCPL
-    , OCPL
-    , OCPYPL
-    , STRCPL
-    , TAPL
-    , TCPL
+    , module Bindings.HDF5.PropertyList.DAPL
+    , module Bindings.HDF5.PropertyList.DCPL
+    , module Bindings.HDF5.PropertyList.DXPL
+    , module Bindings.HDF5.PropertyList.FAPL
+    , module Bindings.HDF5.PropertyList.FCPL
+    , module Bindings.HDF5.PropertyList.FMPL
+    , module Bindings.HDF5.PropertyList.GAPL
+    , module Bindings.HDF5.PropertyList.GCPL
+    , module Bindings.HDF5.PropertyList.LAPL
+    , module Bindings.HDF5.PropertyList.LCPL
+    , module Bindings.HDF5.PropertyList.OCPL
+    , module Bindings.HDF5.PropertyList.OCPYPL
+    , module Bindings.HDF5.PropertyList.STRCPL
+    , module Bindings.HDF5.PropertyList.TAPL
+    , module Bindings.HDF5.PropertyList.TCPL
     ) where
 
 import Bindings.HDF5.Core
@@ -51,8 +51,12 @@ import Bindings.HDF5.PropertyList.FAPL
 import Bindings.HDF5.PropertyList.FCPL
 import Bindings.HDF5.PropertyList.FMPL
 import Bindings.HDF5.PropertyList.GAPL
+import Bindings.HDF5.PropertyList.GCPL
+import Bindings.HDF5.PropertyList.LAPL
 import Bindings.HDF5.PropertyList.LCPL
+import Bindings.HDF5.PropertyList.OCPL
 import Bindings.HDF5.PropertyList.OCPYPL
+import Bindings.HDF5.PropertyList.STRCPL
 import Bindings.HDF5.PropertyList.TAPL
 import Bindings.HDF5.PropertyList.TCPL
 

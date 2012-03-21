@@ -64,17 +64,17 @@ closeGroup (Group grp) =
         h5g_close grp
 
 data GroupStorageType
-    = Compact
-    | Dense
-    | SymbolTable
-    | Unknown
+    = CompactStorage
+    | DenseStorage
+    | SymbolTableStorage
+    | UnknownStorage
     deriving (Eq, Ord, Read, Show, Enum, Bounded)
 
 groupStorageTypeFromCode c
-    | c == h5g_STORAGE_TYPE_COMPACT         = Compact
-    | c == h5g_STORAGE_TYPE_DENSE           = Dense
-    | c == h5g_STORAGE_TYPE_SYMBOL_TABLE    = SymbolTable
-    | otherwise                             = Unknown
+    | c == h5g_STORAGE_TYPE_COMPACT         = CompactStorage
+    | c == h5g_STORAGE_TYPE_DENSE           = DenseStorage
+    | c == h5g_STORAGE_TYPE_SYMBOL_TABLE    = SymbolTableStorage
+    | otherwise                             = UnknownStorage
 
 data GroupInfo = GroupInfo
     { groupStorageType  :: !GroupStorageType

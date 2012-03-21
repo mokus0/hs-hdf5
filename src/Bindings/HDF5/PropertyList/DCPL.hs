@@ -67,21 +67,21 @@ class ObjectCreationPropertyList t => DatasetCreationPropertyList t where
 instance DatasetCreationPropertyList DCPL
 
 data Layout
-    = Compact
-    | Contiguous
-    | Chunked
+    = CompactLayout
+    | ContiguousLayout
+    | ChunkedLayout
     deriving (Eq, Ord, Bounded, Enum, Read, Show)
 
 layoutCode :: Layout -> H5D_layout_t
-layoutCode Compact      = h5d_COMPACT
-layoutCode Contiguous   = h5d_CONTIGUOUS
-layoutCode Chunked      = h5d_CHUNKED
+layoutCode CompactLayout      = h5d_COMPACT
+layoutCode ContiguousLayout   = h5d_CONTIGUOUS
+layoutCode ChunkedLayout      = h5d_CHUNKED
 
 layout :: H5D_layout_t -> Layout
 layout c
-    | c == h5d_COMPACT      = Compact
-    | c == h5d_CONTIGUOUS   = Contiguous
-    | c == h5d_CHUNKED      = Chunked
+    | c == h5d_COMPACT      = CompactLayout
+    | c == h5d_CONTIGUOUS   = ContiguousLayout
+    | c == h5d_CHUNKED      = ChunkedLayout
     | otherwise = error ("unknown H5D_layout_t: " ++ show c)
 
 setLayout :: DatasetCreationPropertyList t => t -> Layout -> IO ()
