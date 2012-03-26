@@ -31,32 +31,31 @@ Go nuts!  (You probably will want to keep [the HDF5 reference](http://www.hdfgro
 
     import Bindings.HDF5
     import Control.Monad
-    import qualified Data.ByteString.UTF8 as BS
-    import Data.Random
+    import qualified Data.ByteString.Char8 as BS
     import qualified Data.Vector.Storable as V
     import qualified Data.Vector.Storable.Mutable as M
+    import System.Random
     
     main = do
         -- first a silly "calculation", so we have something to write:
         densityVec <- M.replicate (10*10*10) (0.0 :: Float)
-        replicateM_ 1000000 $ do
-            x <- sample (normal 5 3) :: IO Float
-            y <- sample (normal 5 3) :: IO Float
-            z <- sample (normal 5 3) :: IO Float
+        replicateM_ 1000 $ do
+            x <- randomRIO (0, 9)
+            y <- randomRIO (0, 9)
+            z <- randomRIO (0, 9)
             let -- location in the vector - writeDataset uses "row major" order.
                 i = round x * 10 * 10
                   + round y * 10
                   + round z
             
-            when (0 <= i && i < 10^3) $ do
-                d <- M.read densityVec i
-                M.write densityVec i (d + 1e-3)
+            d <- M.read densityVec i
+            M.write densityVec i (d + 1)
         densityVec <- V.freeze densityVec
         
         -- now write it to a file:
-        file <- createFile (BS.fromString "foo.h5") [Truncate] Nothing Nothing
+        file <- createFile (BS.pack "foo.h5") [Truncate] Nothing Nothing
         dataspace <- createSimpleDataspace [10,10,10]
-        dataset <- createDataset file (BS.fromString "density") nativeFloat dataspace
+        dataset <- createDataset file (BS.pack "density") nativeFloat dataspace
                         Nothing Nothing Nothing
         writeDataset dataset Nothing Nothing Nothing densityVec
         
