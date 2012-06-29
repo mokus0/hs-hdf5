@@ -2,7 +2,7 @@ name:                   hdf5
 version:                1.8.8
 stability:              provisional
 
-cabal-version:          >= 1.2
+cabal-version:          >= 1.6
 build-type:             Simple
 
 author:                 James Cook <mokus@deepbondi.net>
@@ -13,6 +13,10 @@ homepage:               https://github.com/mokus0/hs-hdf5
 category:               Database
 synopsis:               Haskell interface to the HDF5 scientific data storage library.
 description:            This is a low-level but typesafe Haskell interface to the HDF5 library.  No pointers necessary.
+
+source-repository head
+  type: git
+  location: git://github.com/mokus0/hs-hdf5.git
 
 Library
   hs-source-dirs:       src
@@ -49,7 +53,7 @@ Library
   other-modules:        Bindings.HDF5.Core.HId
                         Bindings.HDF5.Core.HDFResultType
                         
-  build-depends:        base >= 3,
+  build-depends:        base >= 3 && < 5,
                         bindings-hdf5,
                         bytestring,
                         tagged,
