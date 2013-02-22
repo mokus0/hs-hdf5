@@ -85,7 +85,7 @@ withErrorWhen isError action = do
             errors  <- newIORef []
             
             walk <- wrapStackWalk $ \_ (In err) _ -> do
-                err_desc <- peek err
+                err_desc <- readHDF5Error =<< peek err
                 modifyIORef errors (err_desc :)
                 return (HErr_t 0)
             
@@ -94,7 +94,7 @@ withErrorWhen isError action = do
                     freeHaskellFunPtr walk
                     h5e_close_stack stackId
             
-            errs <- readIORef errors >>= mapM readHDF5Error
+            errs <- readIORef errors
             throwIO (HDF5Exception errs)
         else return result
 
